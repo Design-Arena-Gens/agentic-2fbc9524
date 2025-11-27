@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ group.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1>{{ group.name }}</h1>
+        <p class="lead">{{ group.description }}</p>
+        <p class="text-muted">
+            <strong>Creator:</strong> {{ group.creator.username }}<br>
+            <strong>Members:</strong> {{ group.members.count }}<br>
+            <strong>Created:</strong> {{ group.created_at|date:"M d, Y" }}
+        </p>
+
+        {% if is_member %}
+            <div class="alert alert-success">You are a member of this group</div>
+        {% elif has_pending_request %}
+            <div class="alert alert-warning">Your join request is pending approval</div>
+        {% else %}
+            <a href="{% url 'join_group' group.pk %}" class="btn btn-primary">Request to Join</a>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Members ({{ group.members.count }})</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for member in group.members.all %}
+                    <li class="mb-2">
+                        <a href="{% url 'profile_user' member.username %}">{{ member.username }}</a>
+                        {% if member == group.creator %}
+                            <span class="badge bg-primary">Creator</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if is_creator and pending_requests %}
+<div class="mt-4">
+    <h3>Pending Join Requests</h3>
+    <div class="list-group">
+        {% for request in pending_requests %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">{{ request.user.username }}</h5>
+                <small>Requested: {{ request.created_at|date:"M d, Y H:i" }}</small>
+            </div>
+            <div>
+                <a href="{% url 'approve_request' request.pk %}" class="btn btn-success btn-sm">Approve</a>
+                <a href="{% url 'reject_request' request.pk %}" class="btn btn-danger btn-sm">Reject</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

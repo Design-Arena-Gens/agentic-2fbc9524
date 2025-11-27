@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Who Uploaded Content{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Who Uploaded Content</h1>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Material Title</th>
+                <th>Uploader</th>
+                <th>Upload Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in materials %}
+            <tr>
+                <td>{{ material.title }}</td>
+                <td>
+                    <a href="{% url 'profile_user' material.uploader.username %}">
+                        {{ material.uploader.username }}
+                    </a>
+                </td>
+                <td>{{ material.upload_date|date:"M d, Y H:i" }}</td>
+                <td>
+                    <a href="{{ material.file.url }}" class="btn btn-sm btn-primary" target="_blank">Download</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No materials uploaded yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

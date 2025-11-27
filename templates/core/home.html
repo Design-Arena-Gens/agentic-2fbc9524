@@ -1,0 +1,84 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Home - Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Welcome, {{ user.username }}!</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Materials</h5>
+                    <h2 class="text-primary">{{ total_materials }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Study Groups</h5>
+                    <h2 class="text-success">{{ total_groups }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Your Uploads</h5>
+                    <h2 class="text-warning">{{ user_materials }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mb-3">Quick Actions</h3>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <a href="{% url 'study_materials' %}" class="btn btn-primary dashboard-btn w-100">
+                📖 Study Materials
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'upload_material' %}" class="btn btn-success dashboard-btn w-100">
+                ⬆️ Upload Content
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'study_groups' %}" class="btn btn-info dashboard-btn w-100">
+                👥 Study Groups
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'leaderboard' %}" class="btn btn-warning dashboard-btn w-100">
+                🏆 Leaderboard
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'who_uploaded' %}" class="btn btn-secondary dashboard-btn w-100">
+                👤 Who Uploaded
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'leaderboard' %}" class="btn btn-danger dashboard-btn w-100">
+                ⭐ Top Accounts
+            </a>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h4>Top Contributors</h4>
+        <div class="list-group">
+            {% for user_item in top_users %}
+            <a href="{% url 'profile_user' user_item.username %}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ user_item.username }}</h5>
+                    <small>{{ user_item.material_count }} uploads</small>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
